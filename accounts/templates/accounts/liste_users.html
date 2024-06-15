@@ -1,0 +1,73 @@
+{% extends "portefeuille/base.html" %}
+
+{% block content %}
+
+
+
+{% if user.is_authenticated and user.is_staff %}
+
+
+<div class="col-sm-12 mt-3">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="text-center">Liste des utilisateurs</h1>
+        </div>
+            <div class="card-body p-5">
+
+            
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">Identifiant</th>
+                            <th scope="col">Nom</th>
+                            <th scope="col">Prénom</th>
+                            <th scope="col">Actif</th>
+                            <th scope="col">Administrateur</th>
+                            <th scope="col">Modification</th>
+                            <th scope="col">Suppression</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for liste_user in liste_users %}
+                            <tr>
+                                <th scope="row">{{ liste_user.username }}</th>
+                                <td>{{ liste_user.last_name }}</td>
+                                <td>{{ liste_user.first_name }}</td>
+                                {% if liste_user.is_active %}
+                                    <td><i class="fa-solid fa-square-check"></i></td>
+                                {% else %}
+                                    <td><i class="fa-regular fa-square"></i></td>
+                                {% endif %}
+                                {% if liste_user.is_staff %}
+                                    <td><i class="fa-solid fa-square-check"></i></td>
+                                {% else %}
+                                    <td><i class="fa-regular fa-square"></i></td>
+                                {% endif %}
+                                <td><a href="{% url 'accounts:update' liste_user.id %}" class="btn btn-warning">
+                                    <i class="fa-solid fa-pen" aria-hidden="true"></i> Modification
+                                  </a>
+                                </td>
+                                <td><a href="{% url 'accounts:delete' liste_user.id %}" class="btn btn-danger">
+                                    <i class="fa-regular fa-trash-can" aria-hidden="true"></i> Suppression
+                                  </a>
+                                </td>
+                            </tr>
+
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+
+
+            </div>
+    </div>
+</div>
+</div>
+
+{% endif %}
+
+
+
+
+{% endblock %}

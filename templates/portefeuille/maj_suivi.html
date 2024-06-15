@@ -1,0 +1,23 @@
+{% extends "portefeuille/base.html" %}
+
+{% block content %}
+{% if user.is_authenticated and user.is_staff %}
+<!-- Page pour informer que le portefeuille à été mis à jour avec succes -->
+<div class="row p-4">
+    <div class="col-sm-12 mt-3">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="text-center">Calcul du portefeuille</h1>
+            </div>
+                <div class="card-body">
+                    <h2 class="text-center text-info">Le portefeuille a été mis à jour avec succes</h2>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endif %}
+
+{% endblock %}
+

@@ -1,0 +1,85 @@
+{% extends "portefeuille/base.html" %}
+
+{% block content %}
+
+{% if user.is_authenticated and user.is_staff %}
+
+
+<div class="col-sm-12 mt-3">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="text-center">Création Utilisateur</h1>
+        </div>
+            <div class="card-body p-5">
+                <div class="row text-center text-danger">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row text-center">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">Entrez un identifiant :</div>
+                        <div class="col-sm-1">{{ form.username }}</div>
+                    </div>
+                    <div class="row text-center p-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">Entrez un nom :</div>
+                        <div class="col-sm-1">{{ form.last_name }}</div>
+                    </div>
+                    <div class="row text-center p-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">Entrez un prénom :</div>
+                        <div class="col-sm-1">{{ form.first_name }}</div>
+                    </div>
+                    <div class="row text-center p-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">Entrez votre mot de passe :</div>
+                        <div class="col-sm-1">{{ form.password1 }}</div>
+                    </div>
+                    <div class="fst-italic text-center text-danger">
+                        <p>Votre mot de passe ne peut pas trop ressembler à vos autres informations personnelles.</p>
+                        <p>Votre mot de passe doit contenir au minimum 8 caractères.</p>
+                        <p>Votre mot de passe ne peut pas être un mot de passe couramment utilisé.</p>
+                        <p>Votre mot de passe ne peut pas être entièrement numérique</p>
+                    </div>
+                    <div class="row text-center p-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">Entrez de nouveau votre mot de passe :</div>
+                        <div class="col-sm-1">{{ form.password2 }}</div>
+                    </div>
+                    <div class="row text-center p-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">User actif :</div>
+                        <div class="col-sm-1">{{ form.is_active }}</div>
+                    </div>
+                    <div class="row text-center p-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">User Administrateur :</div>
+                        <div class="col-sm-1">{{ form.is_staff }}</div>
+                    </div>
+                    <div class="row text-center p-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4">
+                            <input class="btn btn-success p-4 fs-3 rounded-pill" type="submit" value="Valider">
+                        </div>
+                    </div>
+                </form>
+            </div>
+    </div>
+</div>
+</div>
+
+{% endif %}
+
+
+<!-- <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Créer le compte">
+</form> -->
+
+{% endblock %}
