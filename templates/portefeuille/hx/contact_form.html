@@ -1,0 +1,18 @@
+<turbo-frame id="moncontact">
+    <form action="{% url 'hx-contact-form' %}" method="post">
+        <div>
+            <label>First Name</label>
+            <input type="text" name="firstName" value="Joe">
+        </div>
+        <div class="form-group">
+            <label>Last Name</label>
+            <input type="text" name="lastName" value="Blow">
+        </div>
+        <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" name="email" value="joe@blow.com">
+        </div>
+        <a type="submit" class="btn btn-primary">Submit</a>
+        <a class="btn btn-primary" href="{% url 'hx-contact' %}">Cancel</button>
+    </form>
+</turbo-frame>

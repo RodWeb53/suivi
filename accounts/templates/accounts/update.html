@@ -1,0 +1,74 @@
+{% extends "portefeuille/base.html" %}
+
+{% block content %}
+
+{% if user.is_authenticated and user.is_staff %}
+
+<div class="col-sm-12 mt-3">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="text-center">Modification Utilisateur</h1>
+        </div>
+            <div class="card-body p-5">
+                <div class="row text-center text-danger">
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="row text-center">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">Entrez un identifiant :</div>
+                        <div class="col-sm-1">{{ form.username }}</div>
+                    </div>
+                    <div class="row text-center p-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">Entrez un nom :</div>
+                        <div class="col-sm-1">{{ form.last_name }}</div>
+                    </div>
+                    <div class="row text-center p-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">Entrez un prénom :</div>
+                        <div class="col-sm-1">{{ form.first_name }}</div>
+                    </div>
+                    <div class="row text-center p-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">User actif :</div>
+                        <div class="col-sm-1">{{ form.is_active }}</div>
+                    </div>
+                    <div class="row text-center p-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-2">User Administrateur :</div>
+                        <div class="col-sm-1">{{ form.is_staff }}</div>
+                    </div>
+                    <div class="row text-center p-3">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4">
+                            <input class="btn btn-success p-3 fs-3 rounded-pill" type="submit" value="Validation">
+                        </div>
+                        <div class="col-sm-4">
+                            <a href="{% url 'accounts:liste_users' %}" class="btn btn-info p-3 fs-3 rounded-pill">Retour à la liste des users</a>
+
+                        </div>
+                    </div>
+
+             
+                </form>
+            </div>
+    </div>
+</div>
+</div>
+
+{% endif %}
+
+
+<!-- <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Créer le compte">
+</form> -->
+
+{% endblock %}
