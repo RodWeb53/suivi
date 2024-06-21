@@ -128,6 +128,7 @@ DATE_FORMAT = "Y-m-d"
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [
     BASE_DIR / "suivislts" / "_static",
 ]
