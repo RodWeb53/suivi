@@ -129,7 +129,7 @@ DATE_FORMAT = "Y-m-d"
 
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [
-    BASE_DIR / "portefeuille/static",
+    BASE_DIR / "suivislts" / "_static",
 ]
 
 # Default primary key field type
