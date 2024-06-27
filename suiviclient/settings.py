@@ -138,4 +138,4 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Mise en place d'un time out pour déconnexion tps en secondes
-SESSION_EXPIRE_SECONDS = 3600
+SESSION_EXPIRE_SECONDS = 14400
