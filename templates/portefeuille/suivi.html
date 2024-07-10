@@ -285,6 +285,13 @@
             <a href="?{% param_replace page=page_obj.paginator.num_pages %}">Dernière &raquo;</a>
         </div>
         {% endif %}
+        <div class="col border pt-3 pb-3">
+            <form>
+
+                <input id="page" name="page" type="text" class="text-center">
+            </form>
+            <a href="?{% param_replace page=page %}">Aller à la page</a>
+        </div>
     </div>
 </div>
 
