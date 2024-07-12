@@ -28,12 +28,14 @@ def portefeuille(request):
         client_form = request.GET.get("client", 0)
         produit_form = request.GET.get("produit", 0)
         commande_form = request.GET.get("commande", 0)
+        ref_interne_form = request.GET.get("ref_interne", 0)
         montant_form = request.GET.get("montant", 0)
-        if client_form == 0 and produit_form == 0 and commande_form == 0 and montant_form == 0:
+        if client_form == 0 and produit_form == 0 and commande_form == 0 and montant_form == 0 and ref_interne_form == 0:
             # Chargement des données de recherche dans le formulaire de base avec des valeurs à 0
             form.fields['client'].initial = client_form
             form.fields['produit'].initial = produit_form
             form.fields['commande'].initial = commande_form
+            form.fields['ref_interne'].initial = ref_interne_form
             form.fields['montant'].initial = montant_form
             # Envoie des données globale s'il n'y a pas de filtre sur le client et le produit
             data = data
@@ -44,17 +46,20 @@ def portefeuille(request):
             form.fields['client'].initial = client_form
             form.fields['produit'].initial = produit_form
             form.fields['commande'].initial = commande_form
+            form.fields['ref_interne'].initial = ref_interne_form
             form.fields['montant'].initial = montant_form
             # S'il y a un filtre sur le client, le produit, la commande et sur le montant
             if client_form != "0" and \
                     produit_form != "0" and \
                     commande_form != "0" and \
+                    ref_interne_form != "0" and \
                     montant_form != "0":
 
                 for client in data:
                     if client["num_client"] == int(client_form) and \
                             client["produit"] == int(produit_form) and \
                             client["num_cde"] == int(commande_form) and \
+                            client["ref_interne"] == str(ref_interne_form) and \
                             client["montant_total"] >= float(montant_form):
 
                         liste_filtre.append(client)
@@ -65,11 +70,13 @@ def portefeuille(request):
             elif client_form != "0" and \
                     produit_form != "0" and \
                     commande_form != "0" and \
+                    ref_interne_form != "0" and \
                     montant_form == "0":
 
                 for client in data:
                     if client["num_client"] == int(client_form) and \
                             client["produit"] == int(produit_form) and \
+                            client["ref_interne"] == str(ref_interne_form) and \
                             client["num_cde"] == int(commande_form):
 
                         liste_filtre.append(client)
@@ -257,80 +264,19 @@ def portefeuille(request):
 
                 data = liste_filtre
 
-            # # S'il y a un filtre sur le client, le produit, le montant et pas sur la commande
-            # elif client_form != "0" and \
-            #         produit_form != "0" and \
-            #         commande_form == "0":
+            # S'il y a un filtre sur la ref interne
+            if client_form == "0" and \
+                    produit_form == "0" and \
+                    commande_form == "0" and \
+                    ref_interne_form != "0" and \
+                    montant_form == "0":
 
-            #     for client in data:
-            #         if client["num_client"] == int(client_form) and \
-            #                 client["produit"] == int(produit_form):
+                for client in data:
+                    if str(ref_interne_form) in client["ref_interne"]:
 
-            #             liste_filtre.append(client)
+                        liste_filtre.append(client)
 
-            #     data = liste_filtre
-
-            # # S'il y a un filtre sur le client et la commande et pas sur le produit
-            # elif client_form != "0" and \
-            #         produit_form == "0" and \
-            #         commande_form != "0":
-
-            #     for client in data:
-
-            #         if client["num_client"] == int(client_form) and \
-            #                 client["num_cde"] == int(commande_form):
-
-            #             liste_filtre.append(client)
-
-            #     data = liste_filtre
-
-            # # S'il y a un filtre sur le client et pas sur le produit ni sur la commande
-            # elif client_form != "0" and \
-            #         produit_form == "0" and \
-            #         commande_form == "0":
-
-            #     for client in data:
-
-            #         if client["num_client"] == int(client_form):
-
-            #             liste_filtre.append(client)
-
-            #     data = liste_filtre
-
-            # # S'il y a un filtre sur le produit et pas sur le client ni sur la commande
-            # elif client_form == "0" and \
-            #         produit_form != "0" and \
-            #         commande_form == "0":
-
-            #     for client in data:
-            #         if client["produit"] == int(produit_form):
-            #             liste_filtre.append(client)
-            #     data = liste_filtre
-
-            # # S'il y a un filtre sur le produit et la commande et pas sur le client
-            # elif client_form == "0" and \
-            #         produit_form != "0" and \
-            #         commande_form != "0":
-
-            #     for client in data:
-            #         if client["produit"] == int(produit_form) and \
-            #                 client["num_cde"] == int(commande_form):
-
-            #             liste_filtre.append(client)
-
-            #     data = liste_filtre
-
-            # # S'il y a un filtre sur la commande et pas sur le client ni le produit
-            # elif client_form == "0" and \
-            #         produit_form == "0" and \
-            #         commande_form != "0":
-
-            #     for client in data:
-            #         if client["num_cde"] == int(commande_form):
-
-            #             liste_filtre.append(client)
-
-            #     data = liste_filtre
+                data = liste_filtre
 
     # Gestion de la pagination des pages
     paginator = Paginator(data, 10)

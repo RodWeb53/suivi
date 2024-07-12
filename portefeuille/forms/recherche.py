@@ -7,3 +7,4 @@ class ClientSearchForm(forms.Form):
     produit = forms.CharField(label="Numéro du produit", required=True)
     commande = forms.CharField(label="Numéro de commande", required=True)
     montant = forms.CharField(label="Montant sup à", required=True)
+    ref_interne = forms.CharField(label="Ref produit client", required=True)
