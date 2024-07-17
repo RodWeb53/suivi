@@ -13,6 +13,7 @@ def stock(request):
     # Ouverture du fichier JSON
     with open('data.json', 'r') as f:
         data = json.load(f)
+        montant_stock = 0
     # Vérification des données qui sont envoyer depuis la page
     if request.method == "POST":
         form = StockSearchForm(request.POST)
@@ -32,7 +33,6 @@ def stock(request):
         ferme_form = request.GET.get("ferme", "")
 
         if client_form == 0 and commande_form == 0 and date_demande_form == 0 and date_choix_form == 0 and ferme_form == "":
-            print("passage dans le if")
             # Chargement des données de recherche dans le formulaire de base avec des valeurs à 0
             liste_filtre_base = []
             form.fields['client'].initial = client_form
@@ -44,10 +44,11 @@ def stock(request):
             # Envoie des données globale s'il n'y a pas de filtre sur le client et le produit
             for client in data:
                 if client["livrable"] == 1:
+                    montant_stock = montant_stock + int(client["montant_total"])
                     liste_filtre_base.append(client)
+
             data = liste_filtre_base
         else:
-            print("Passage dans le else")
             # création d'une variable pour récupérer les éléments en fonction du filtre
             liste_filtre = []
             # Chargement des valeurs du filtre dans la page de base
@@ -64,6 +65,7 @@ def stock(request):
 
                 for client in data:
                     if client["livrable"] == 1:
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -76,6 +78,7 @@ def stock(request):
 
                 for client in data:
                     if client["livrable"] == 1 and client["ferme_prev"] == ferme_form.upper():
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -91,6 +94,7 @@ def stock(request):
                     if client["livrable"] == 1 and \
                             client["ferme_prev"] == ferme_form.upper() and \
                             client["num_client"] == int(client_form):
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -105,6 +109,7 @@ def stock(request):
                 for client in data:
                     if client["livrable"] == 1 and \
                             client["num_client"] == int(client_form):
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -121,6 +126,7 @@ def stock(request):
                             client["ferme_prev"] == ferme_form.upper() and \
                             client["num_cde"] == int(commande_form) and \
                             client["num_client"] == int(client_form):
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -136,6 +142,7 @@ def stock(request):
                     if client["livrable"] == 1 and \
                             client["num_cde"] == int(commande_form) and \
                             client["num_client"] == int(client_form):
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -154,6 +161,7 @@ def stock(request):
                             client["num_cde"] == int(commande_form) and \
                             client["date_depart"] <= date_demande_form and \
                             client["num_client"] == int(client_form):
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -171,6 +179,7 @@ def stock(request):
                             client["num_cde"] == int(commande_form) and \
                             client["date_depart"] <= date_demande_form and \
                             client["num_client"] == int(client_form):
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -187,6 +196,7 @@ def stock(request):
                     if client["livrable"] == 1 and \
                             client["date_depart"] <= date_demande_form and \
                             client["num_client"] == int(client_form):
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -204,6 +214,7 @@ def stock(request):
                             client["date_depart"] <= date_demande_form and \
                             client["ferme_prev"] == ferme_form.upper() and \
                             client["num_client"] == int(client_form):
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -222,6 +233,7 @@ def stock(request):
                             client["num_cde"] == int(commande_form) and \
                             client["date_arrivee"] <= date_demande_form and \
                             client["num_client"] == int(client_form):
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -240,6 +252,7 @@ def stock(request):
                             client["num_cde"] == int(commande_form) and \
                             client["date_arrivee"] <= date_demande_form and \
                             client["num_client"] == int(client_form):
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -256,6 +269,7 @@ def stock(request):
                     if client["livrable"] == 1 and \
                             client["date_arrivee"] <= date_demande_form and \
                             client["num_client"] == int(client_form):
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -273,6 +287,7 @@ def stock(request):
                             client["ferme_prev"] == ferme_form.upper() and \
                             client["date_arrivee"] <= date_demande_form and \
                             client["num_client"] == int(client_form):
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -290,6 +305,7 @@ def stock(request):
                             client["ferme_prev"] == ferme_form.upper() and \
                             client["num_cde"] == int(commande_form) and \
                             client["date_arrivee"] <= date_demande_form:
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -307,6 +323,7 @@ def stock(request):
                             client["ferme_prev"] == ferme_form.upper() and \
                             client["num_cde"] == int(commande_form) and \
                             client["date_depart"] <= date_demande_form:
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -323,6 +340,7 @@ def stock(request):
                     if client["livrable"] == 1 and \
                             client["num_cde"] == int(commande_form) and \
                             client["date_arrivee"] <= date_demande_form:
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -339,6 +357,7 @@ def stock(request):
                     if client["livrable"] == 1 and \
                             client["num_cde"] == int(commande_form) and \
                             client["date_depart"] <= date_demande_form:
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -354,6 +373,7 @@ def stock(request):
                 for client in data:
                     if client["livrable"] == 1 and \
                             client["date_depart"] <= date_demande_form:
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -370,6 +390,7 @@ def stock(request):
                     if client["livrable"] == 1 and \
                             client["ferme_prev"] == ferme_form.upper() and \
                             client["date_depart"] <= date_demande_form:
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -385,6 +406,7 @@ def stock(request):
                 for client in data:
                     if client["livrable"] == 1 and \
                             client["date_arrivee"] <= date_demande_form:
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -401,6 +423,7 @@ def stock(request):
                     if client["livrable"] == 1 and \
                             client["ferme_prev"] == ferme_form.upper() and \
                             client["date_arrivee"] <= date_demande_form:
+                        montant_stock = montant_stock + int(client["montant_total"])
 
                         liste_filtre.append(client)
 
@@ -411,4 +434,4 @@ def stock(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'portefeuille/stock.html', context={"page_obj": page_obj, "form": form})
+    return render(request, 'portefeuille/stock.html', context={"page_obj": page_obj, "form": form, "montant_stock": montant_stock})
