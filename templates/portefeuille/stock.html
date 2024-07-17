@@ -1,0 +1,140 @@
+{% extends "portefeuille/base.html" %}
+{% load tag %}
+{% load mathfilters %}
+<!-- Page pour afficher le portefeuille de suivi client -->
+{% block content %}
+
+<!-- Module de recherche par client et par produit-->
+<div class="row p-4">
+    <div class="col-sm-12 mt-3">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3 class="fw-bold">Moteur de recherche pour stock</h3>
+            </div>
+            <form action="{% url 'stock' %}" method="post">
+                <div class="card-body">
+                    {% csrf_token %}
+                    <div class="container">
+                        <div class="row text-center">
+                            <div class="col-sm-2">
+                                <P class="fw-bold">Numéro de client : {{ form.client }}</P>
+                            </div>
+                            <div class="col-sm-2">
+                                <P class="fw-bold">Numéro de commande : {{ form.commande }}</P>
+                            </div>
+                            <div class="col-sm-2">
+                                <p class="fw-bold">Date départ : {{ form.date_choix }}</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <p class="fw-bold">Date recherche : {{ form.date_demande }}</p>
+                            </div>
+                            <div class="col-sm-2">
+                                <p class="fw-bold">Ferme : {{ form.ferme }}</p>
+                            </div>
+                        </div>
+                        <div class="row text-center">
+                            <div class="col-sm-3">
+                                
+                            </div>
+                            <div class="col-sm-3">
+                                <button class="btn btn-info" type="submit"><i class="fa fa-search" aria-hidden="true"></i>Rechercher</button>
+                            </div>
+                            <div class="col-sm-3">
+                                <a class="btn btn-success" href="{% url 'stock' %}">
+                                    <i class="fa fa-tachometer" aria-hidden="true"></i> Réinisialiser les filtres
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Maquette de la structure des données reçue de l'analyse -->
+<div class="table-responsive-sm" p-4>
+    <table class="table table-sm">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">N° client</th>
+                <th scope="col">Client</th>
+                <th scope="col">Date départ</th>
+                <th scope="col">Date arrivée</th>
+                <th scope="col">Num Cde</th>
+                <th scope="col">Num ligne</th>
+                <th scope="col">F/P</th>
+                <th scope="col">Ref Cde</th>
+                <th scope="col">N° appel</th>
+                <th scope="col">N° produit</th>
+                <th scope="col">Ref client</th>
+                <th scope="col">Nom produit</th>
+                <th scope="col">Quantité</th>
+                <th scope="col">Prix vente</th>
+                <th scope="col">Prix total</th>
+                <th scope="col">Stock</th>
+                <th scope="col">N° Unique</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in page_obj %}
+                <tr class="text-center {% if data.livrable == 1 %}bg-info{% elif data.livrable != 1 %}bg-secondary text-white{% endif %}">
+                    <td>{{ data.num_client }}</td>
+                    <td>{{ data.nom_client }}</td>
+                    <td>{{ data.date_depart|slice:"10" }}</td>
+                    <td>{{ data.date_arrivee|slice:"10" }}</td>
+                    <td>{{ data.num_cde }}</td>
+                    <td>{{ data.num_ligne }}</td>
+                    <td class="{% if data.ferme_prev == 'F' %}bg-success text-white{% endif %}">{{ data.ferme_prev }}</td>
+                    <td>{{ data.ref_commande }}</td>
+                    <td>{{ data.num_appel }}</td>
+                    <td><b class="fs-5">{{ data.produit }}</b></td>
+                    <td>{{ data.ref_interne }}</td>
+                    <td>{{ data.nom_produit }}</td>
+                    <td>{{ data.quantite_cde }}</td>
+                    <td>{{ data.prix_vente }}</td>
+                    <td>{{ data.montant_total }}</td>
+                    <td>{{ data.stock }}</td>
+                    <td>{{ data.num_unique }}</td>
+
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+
+<!-- Système de pagination en fin de page -->
+<div class="container">
+    <div class="row align-items-start text-center">
+        {% if page_obj.has_previous %}
+        <div class="col border pt-3 pb-3">
+            <a href="?{% param_replace page=1 %}">&laquo; Première</a>
+        </div>
+        <div class="col border pt-3 pb-3">
+            <a href="?{% param_replace page=page_obj.previous_page_number %}">Précédente</a>
+        </div>
+        {% endif %}
+        <div class="col border pt-3 pb-3">
+            <span class="current">
+                Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.
+            </span>
+        </div>
+        {% if page_obj.has_next %}
+        <div class="col border pt-3 pb-3">
+            <a href="?{% param_replace page=page_obj.next_page_number %}">Suivante</a>
+        </div>
+        <div class="col border pt-3 pb-3">
+            <a href="?{% param_replace page=page_obj.paginator.num_pages %}">Dernière &raquo;</a>
+        </div>
+        {% endif %}
+        <div class="col border pt-3 pb-3">
+            <form>
+
+                <input id="page" name="page" type="text" class="text-center">
+            </form>
+            <a href="?{% param_replace page=page %}">Aller à la page</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

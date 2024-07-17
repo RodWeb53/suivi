@@ -1,11 +1,12 @@
 from django.urls import path
-from .views import home, suivi, update_base, portefeuille
+from .views import home, suivi, update_base, portefeuille, stock
 
 urlpatterns = [
     # url de la page d'accueuil
     path("", home.index, name="home"),
     # Urls suivi
     path("suivi", portefeuille.portefeuille, name="suivi"),
+    path("stock", stock.stock, name="stock"),
     # urls pour l'administration
     # url pour la mise à jour des fichiers dans la base de données
     path("maj_suivi", suivi.suivi_list, name="maj_suivi"),
