@@ -3,6 +3,7 @@ from django import forms
 
 # Modéle pour le formulaire de recherche dans le suivi
 class OperationkSearchForm(forms.Form):
+    client = forms.CharField(label="Numéro du client", required=True)
     CHOICES = [
         ('1', 'Poste'),
         ('2', 'Machine'),
