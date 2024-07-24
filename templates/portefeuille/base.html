@@ -36,6 +36,16 @@
               <i class="fa fa-tachometer" aria-hidden="true"></i> Stock
             </a>
           </li>
+          <li>
+            <a href="{% url 'recherche_operation' %}">
+              <i class="fa fa-tachometer" aria-hidden="true"></i> Suivi par machine / poste
+            </a>
+          </li>
+          <li>
+            <a href="{% url 'operations' %}">
+              <i class="fa fa-tachometer" aria-hidden="true"></i> Liste des opérations
+            </a>
+          </li>
           {% if user.is_staff %}
           <li class="header">Menu Administration</li>
           <li>
