@@ -51,7 +51,10 @@ def recherche_operation(request):
                         for recherche in client['operations']:
                             for machine in recherche:
                                 if machine["phase"] == type_machine_form.upper() and not machine["solder"]:
-                                    liste_filtre.append(client)
+                                    if client in liste_filtre:
+                                        break
+                                    else:
+                                        liste_filtre.append(client)
 
                 data = liste_filtre
             # S'il y a un filtre sur le poste et le client
@@ -63,7 +66,10 @@ def recherche_operation(request):
                             for recherche in client['operations']:
                                 for machine in recherche:
                                     if machine["phase"] == type_machine_form.upper() and not machine["solder"]:
-                                        liste_filtre.append(client)
+                                        if client in liste_filtre:
+                                            break
+                                        else:
+                                            liste_filtre.append(client)
 
                 data = liste_filtre
             # S'il y a un filtre sur la machine
@@ -74,7 +80,10 @@ def recherche_operation(request):
                         for recherche in client['operations']:
                             for machine in recherche:
                                 if machine["machine"] == type_machine_form.upper() and not machine["solder"]:
-                                    liste_filtre.append(client)
+                                    if client in liste_filtre:
+                                        break
+                                    else:
+                                        liste_filtre.append(client)
 
                 data = liste_filtre
             # S'il y a un filtre sur la machine et sur le client
@@ -86,7 +95,10 @@ def recherche_operation(request):
                             for recherche in client['operations']:
                                 for machine in recherche:
                                     if machine["machine"] == type_machine_form.upper() and not machine["solder"]:
-                                        liste_filtre.append(client)
+                                        if client in liste_filtre:
+                                            break
+                                        else:
+                                            liste_filtre.append(client)
 
                 data = liste_filtre
 
