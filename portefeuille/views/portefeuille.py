@@ -30,7 +30,8 @@ def portefeuille(request):
         commande_form = request.GET.get("commande", 0)
         ref_interne_form = request.GET.get("ref_interne", 0)
         montant_form = request.GET.get("montant", 0)
-        if client_form == 0 and produit_form == 0 and commande_form == 0 and montant_form == 0 and ref_interne_form == 0:
+        if client_form == 0 and produit_form == 0 and commande_form == 0 and montant_form == 0 and \
+                ref_interne_form == 0:
             # Chargement des données de recherche dans le formulaire de base avec des valeurs à 0
             form.fields['client'].initial = client_form
             form.fields['produit'].initial = produit_form
@@ -74,12 +75,13 @@ def portefeuille(request):
                     montant_form == "0":
 
                 for client in data:
-                    if client["num_client"] == int(client_form) and \
-                            client["produit"] == int(produit_form) and \
-                            client["ref_interne"] == str(ref_interne_form) and \
-                            client["num_cde"] == int(commande_form):
+                    if str(ref_interne_form) is not None:
+                        if client["num_client"] == int(client_form) and \
+                                client["produit"] == int(produit_form) and \
+                                client["ref_interne"] == str(ref_interne_form) and \
+                                client["num_cde"] == int(commande_form):
 
-                        liste_filtre.append(client)
+                            liste_filtre.append(client)
 
                 data = liste_filtre
 
@@ -272,9 +274,11 @@ def portefeuille(request):
                     montant_form == "0":
 
                 for client in data:
-                    if str(ref_interne_form) in client["ref_interne"]:
 
-                        liste_filtre.append(client)
+                    if client["ref_interne"] is not None:
+                        if str(ref_interne_form) in client["ref_interne"]:
+
+                            liste_filtre.append(client)
 
                 data = liste_filtre
 
