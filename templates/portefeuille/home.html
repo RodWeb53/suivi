@@ -1,4 +1,5 @@
 {% extends "portefeuille/base.html" %}
+{% load static %}
 
 {% if user.is_authenticated %}
 {% block content %}
@@ -10,9 +11,9 @@
             <div class="card-header">
                 <h1 class="text-center">Suivi de portefeuille SLTS</h1>
             </div>
-            <div class="card-body p-5">
-                <p class="text-center text-primary fs-1">Bienvenue {{ user.first_name }} sur le portail de suivi des commandes clients SLTS</p>
-            </div>
+                <div class="card-body p-5">
+                    <p class="text-center text-primary fs-1">Bienvenue {{ user.first_name }} sur le portail de suivi des commandes clients SLTS</p>
+                </div>
         </div>
     </div>
     <!-- bouton pour faire un lien vers le suivi de portefeuille -->
@@ -32,7 +33,340 @@
     </div>
 
 </div>
+<div class="card">
+    <div class="card-header text-center">
+        <h2>Chiffres d'affaires</h2>
+    </div>
 
+    <div class="row p-2 text-center">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-2 text-center">
+            <div class="row">
+                <h4>Retard</h4>
+                <h5 class="text-danger">{{ montant_retard }} €</h5>
+            </div>
+            <div class="row">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>DAS</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if montant_das_retard.fe > 0 %}
+                        <tr>
+                            <td>Ferro</td>
+                            <td>{{ montant_das_retard.fe }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_retard.ae > 0 %}
+                        <tr>
+                            <td>Aéro</td>
+                            <td>{{ montant_das_retard.ae }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_retard.de > 0 %}
+                        <tr>
+                            <td>Défense</td>
+                            <td>{{ montant_das_retard.de }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_retard.be > 0 %}
+                        <tr>
+                            <td>Bien Equipement</td>
+                            <td>{{ montant_das_retard.be }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_retard.me > 0 %}
+                        <tr>
+                            <td>Médical</td>
+                            <td>{{ montant_das_retard.me }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_retard.en > 0 %}
+                        <tr>
+                            <td>Energie</td>
+                            <td>{{ montant_das_retard.en }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_retard.ma > 0 %}
+                        <tr>
+                            <td>Maritime</td>
+                            <td>{{ montant_das_retard.ma }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_retard.div > 0 %}
+                        <tr>
+                            <td>Divers</td>
+                            <td>{{ montant_das_retard.div }}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="row">
+                <h4>{{ mois_recherche }}</h4>
+                <h5 class="text-primary">{{ montant_encours }} €</h5>
+            </div>
+            <div class="row">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>DAS</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if montant_das_mois.fe > 0 %}
+                        <tr>
+                            <td>Ferro</td>
+                            <td>{{ montant_das_mois.fe }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois.ae > 0 %}
+                        <tr>
+                            <td>Aéro</td>
+                            <td>{{ montant_das_mois.ae }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois.de > 0 %}
+                        <tr>
+                            <td>Défense</td>
+                            <td>{{ montant_das_mois.de }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois.be > 0 %}
+                        <tr>
+                            <td>Bien Equipement</td>
+                            <td>{{ montant_das_mois.be }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois.me > 0 %}
+                        <tr>
+                            <td>Médical</td>
+                            <td>{{ montant_das_mois.me }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois.en > 0 %}
+                        <tr>
+                            <td>Energie</td>
+                            <td>{{ montant_das_mois.en }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois.ma > 0 %}
+                        <tr>
+                            <td>Maritime</td>
+                            <td>{{ montant_das_mois.ma }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois.div > 0 %}
+                        <tr>
+                            <td>Divers</td>
+                            <td>{{ montant_das_mois.div }}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <h4>{{ mois_recherche_plus_un }}</h4>
+            <h5 class="text-primary">{{ montant_mois_suivant }} €</h5>
+            <div class="row">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>DAS</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if montant_das_mois_suivant.fe > 0 %}
+                        <tr>
+                            <td>Ferro</td>
+                            <td>{{ montant_das_mois_suivant.fe }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant.ae > 0 %}
+                        <tr>
+                            <td>Aéro</td>
+                            <td>{{ montant_das_mois_suivant.ae }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant.de > 0 %}
+                        <tr>
+                            <td>Défense</td>
+                            <td>{{ montant_das_mois_suivant.de }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant.be > 0 %}
+                        <tr>
+                            <td>Bien Equipement</td>
+                            <td>{{ montant_das_mois_suivant.be }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant.me > 0 %}
+                        <tr>
+                            <td>Médical</td>
+                            <td>{{ montant_das_mois_suivant.me }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant.en > 0 %}
+                        <tr>
+                            <td>Energie</td>
+                            <td>{{ montant_das_mois_suivant.en }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant.ma > 0 %}
+                        <tr>
+                            <td>Maritime</td>
+                            <td>{{ montant_das_mois_suivant.ma }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant.div > 0 %}
+                        <tr>
+                            <td>Divers</td>
+                            <td>{{ montant_das_mois_suivant.div }}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <h4>{{ mois_recherche_plus_deux }}</h4>
+            <h5 class="text-primary">{{ montant_mois_suivant_deux }} €</h5>
+            <div class="row">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>DAS</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if montant_das_mois_suivant_deux.fe > 0 %}
+                        <tr>
+                            <td>Ferro</td>
+                            <td>{{ montant_das_mois_suivant_deux.fe }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_deux.ae > 0 %}
+                        <tr>
+                            <td>Aéro</td>
+                            <td>{{ montant_das_mois_suivant_deux.ae }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_deux.de > 0 %}
+                        <tr>
+                            <td>Défense</td>
+                            <td>{{ montant_das_mois_suivant_deux.de }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_deux.be > 0 %}
+                        <tr>
+                            <td>Bien Equipement</td>
+                            <td>{{ montant_das_mois_suivant_deux.be }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_deux.me > 0 %}
+                        <tr>
+                            <td>Médical</td>
+                            <td>{{ montant_das_mois_suivant_deux.me }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_deux.en > 0 %}
+                        <tr>
+                            <td>Energie</td>
+                            <td>{{ montant_das_mois_suivant_deux.en }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_deux.ma > 0 %}
+                        <tr>
+                            <td>Maritime</td>
+                            <td>{{ montant_das_mois_suivant_deux.ma }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_deux.div > 0 %}
+                        <tr>
+                            <td>Divers</td>
+                            <td>{{ montant_das_mois_suivant_deux.div }}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <h4>{{ mois_recherche_plus_trois }}</h4>
+            <h5 class="text-primary">{{ montant_mois_suivant_trois }} €</h5>
+            <div class="row">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>DAS</th>
+                            <th>Montant</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if montant_das_mois_suivant_trois.fe > 0 %}
+                        <tr>
+                            <td>Ferro</td>
+                            <td>{{ montant_das_mois_suivant_trois.fe }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_trois.ae > 0 %}
+                        <tr>
+                            <td>Aéro</td>
+                            <td>{{ montant_das_mois_suivant_trois.ae }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_trois.de > 0 %}
+                        <tr>
+                            <td>Défense</td>
+                            <td>{{ montant_das_mois_suivant_trois.de }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_trois.be > 0 %}
+                        <tr>
+                            <td>Bien Equipement</td>
+                            <td>{{ montant_das_mois_suivant_trois.be }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_trois.me > 0 %}
+                        <tr>
+                            <td>Médical</td>
+                            <td>{{ montant_das_mois_suivant_trois.me }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_trois.en > 0 %}
+                        <tr>
+                            <td>Energie</td>
+                            <td>{{ montant_das_mois_suivant_trois.en }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_trois.ma > 0 %}
+                        <tr>
+                            <td>Maritime</td>
+                            <td>{{ montant_das_mois_suivant_trois.ma }}</td>
+                        </tr>
+                        {% endif %}
+                        {% if montant_das_mois_suivant_trois.div > 0 %}
+                        <tr>
+                            <td>Divers</td>
+                            <td>{{ montant_das_mois_suivant_trois.div }}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+</div>
 
     <!-- bouton de déconnexion -->
     <div class="row text-right p-5">
