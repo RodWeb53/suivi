@@ -32,6 +32,7 @@ class Portefeuille(models.Model):
     num_unique = models.IntegerField(default=0, blank=True)
     nom_client = models.CharField(max_length=128, blank=True)
     montant_total = models.FloatField(default=0, blank=True)
+    das = models.CharField(max_length=5, blank=True)
 
     def __str__(self):
         return f"client : {self.num_client} (produit : {self.produit})"
@@ -45,9 +46,10 @@ class BaseOF(models.Model):
     date_debut = models.DateField(blank=True)
     date_fin = models.DateField(blank=True)
     quantite = models.IntegerField(default=0, blank=True)
-    id_cde = models.IntegerField(default=0, blank=True)
+    sem_contrainte = models.IntegerField(default=0, blank=True)
     nbre_operation = models.IntegerField(default=0, blank=True)
     qte_base = models.IntegerField(default=0, blank=True)
+    contrainte = models.CharField(max_length=5, blank=True)
 
     def __str__(self):
         return f"{self.num_produit} ({self.quantite}) ({self.num_of}) ({self.id_cde})"

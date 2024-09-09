@@ -1,0 +1,299 @@
+{% extends "portefeuille/base.html" %}
+{% load tag %}
+{% load mathfilters %}
+<!-- Page pour afficher le portefeuille de suivi client -->
+{% block content %}
+
+<!-- Module de recherche par client et par produit-->
+<div class="row p-4">
+    <div class="col-sm-12 mt-3">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3 class="fw-bold">Moteur de recherche par contrainte</h3>
+            </div>
+            <form action="{% url 'contrainte' %}" method="post">
+                <div class="card-body">
+                    {% csrf_token %}
+                    <div class="container">
+
+                        <div class="row text-center">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-3">
+                                <P class="fw-bold">Contrainte : <br> {{ form.contrainte }}</P>
+                            </div>
+                            <div class="col-sm-3">
+                                <P class="fw-bold">Semaine : <br> {{ form.sem_contrainte }}</P>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-sm-4">
+                            
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-info" type="submit"><i class="fa fa-search" aria-hidden="true"></i>Rechercher</button>
+                        </div>
+                        <div class="col-sm-2">
+                            <a class="btn btn-success" href="{% url 'contrainte' %}">
+                                <i class="fa fa-tachometer" aria-hidden="true"></i> Réinisialiser les filtres
+                            </a>
+                        </div>
+                        <div class="col-sm-2">
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Maquette de la structure des données reçue de l'analyse -->
+<div class="table-responsive-sm" p-4>
+    <table class="table table-sm">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">N° client</th>
+                <th scope="col">Client</th>
+                <th scope="col">Date départ</th>
+                <th scope="col">Date arrivée</th>
+                <th scope="col">Num Cde</th>
+                <th scope="col">Num ligne</th>
+                <th scope="col">F/P</th>
+                <th scope="col">Ref Cde</th>
+                <th scope="col">N° appel</th>
+                <th scope="col">N° produit</th>
+                <th scope="col">Ref client</th>
+                <th scope="col">Nom produit</th>
+                <th scope="col">Quantité</th>
+                <th scope="col">Prix vente</th>
+                <th scope="col">Prix total</th>
+                <th scope="col">Stock</th>
+                <th scope="col">N° Unique</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in page_obj %}
+                <tr class="text-center {% if data.livrable == 1 %}bg-info{% elif data.livrable != 1 %}bg-secondary text-white{% endif %}">
+                    <td>{{ data.num_client }}</td>
+                    <td>{{ data.nom_client }}</td>
+                    <td>{{ data.date_depart|slice:"10" }}</td>
+                    <td>{{ data.date_arrivee|slice:"10" }}</td>
+                    <td>{{ data.num_cde }}</td>
+                    <td>{{ data.num_ligne }}</td>
+                    <td class="{% if data.ferme_prev == 'F' %}bg-success text-white{% endif %}">{{ data.ferme_prev }}</td>
+                    <td>{{ data.ref_commande }}</td>
+                    <td>{{ data.num_appel }}</td>
+                    <td><b class="fs-5">{{ data.produit }}</b></td>
+                    <td>{{ data.ref_interne }}</td>
+                    <td>{{ data.nom_produit }}</td>
+                    <td>{{ data.quantite_cde }}</td>
+                    <td>{{ data.prix_vente }}</td>
+                    <td>{{ data.montant_total }}</td>
+                    <td>{{ data.stock }}</td>
+                    <td>{{ data.num_unique }}</td>
+
+                    {% for of in data.of %}
+
+                        <thead>
+                            <tr>
+                                <th scope="col">N° OF</th>
+                                <th scope="col">Opérations</th>
+                                <th scope="col">Date fab</th>
+                                <th scope="col">Tps Total</th>
+                                <th scope="col">N° phase</th>
+                                <th scope="col">Produit GP</th>
+                                <th scope="col">Code produit</th>
+                                <th scope="col">Désignation</th>
+                                <th scope="col">Date besoin</th>
+                                <th scope="col">Qté besoin</th>
+                                <th scope="col">Qté stock</th>
+                                <th scope="col">Stock restant à date</th>
+                                <th scope="col">Fournisseur</th>
+                                <th scope="col">Cde Fournisseur</th>
+                                <th scope="col">N° ligne</th>
+                                <th scope="col">Quantité</th>
+                                <th scope="col">Date livraison</th>
+                                <th scope="col">Réception</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        {% if of.produit == data.produit %}
+                                            <td class="table-warning text-center" colspan="20">
+                                                <b class="fs-5">OF : {{ of.of }} </b>  / N° produit :  {{ of.produit }} / Quantité pour la cde : {{ of.qte }} / Statut OF :  {{ of.statut_of }}  / <b class="fs-5">Contrainte : {{ of.contrainte }} / Semaine : {{ of.sem_contrainte }}</b>
+                                            </td>
+                                        {% else %}
+                                            <td class="table-primary text-center" colspan="20">
+                                                <b class="fs-5">OF : {{ of.of }} </b>  / N° produit :  {{ of.produit }} / Quantité pour la cde : {{ of.qte }} / Statut OF :  {{ of.statut_of }}  / <b class="fs-5">Contrainte : {{ of.contrainte }} / Semaine : {{ of.sem_contrainte }}</b>
+                                            </td>
+                                        {% endif %}
+                                    </div>
+                                    
+                                    {% for operations in data.operations %}
+                                        {% for operation in operations %}
+                                            <div class="row">
+                                                {% if of.of == operation.num_of_operation %}
+                                                    <td>
+                                                        <div class="row">
+                                                            
+                                                            <tr class="{% if operation.solder == True %}bg-success text-white{% endif %}">
+                                                                <td>
+                                                                    {{ operation.num_of_operation }}
+                                                                </td>
+                                                                <td> 
+                                                                    {{ operation.description_operation }}
+                                                                </td>
+                                                                <td> 
+                                                                    {{ operation.date_fab|slice:"10" }}
+                                                                </td>
+                                                                <td> 
+                                                                    {{ operation.temps_total }}
+                                                                </td>
+                                                                <td> 
+                                                                    {{ operation.num_phase_operation }}
+                                                                </td>
+
+                                                                <div class="row">
+                                                                    {% for list_nomenclature in data.nomenclatures %}
+                                                                        {% for nomenclature in list_nomenclature %}
+                                                                            <tr>
+                                                                                {% if operation.num_unique == nomenclature.num_unique_nomenclature %}
+                                                                                    <td colspan="5">
+                                                                                        <td>
+                                                                                            {% if nomenclature.produit_gp == True %}
+                                                                                            <p>X</p>
+                                                                                            {% else %}
+                                                                                            <p> </p>
+                                                                                            {% endif %}
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            {{ nomenclature.num_produit }}
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            {{ nomenclature.designation_produit }}
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            {{ nomenclature.date_conso|slice:"10" }}
+                                                                                        </td>
+                                                                                        <td>
+                                                                                            {{ nomenclature.quantite_besoin }}
+                                                                                        </td>
+                                                                                        {% if nomenclature.quantite_besoin > nomenclature.stock_global %}
+                                                                                            <td class="bg-warning">
+                                                                                                {{ nomenclature.stock_global }}
+                                                                                            </td>
+                                                                                        {% else %}
+                                                                                            <td class="bg-success text-white">
+                                                                                                {{ nomenclature.stock_global }}
+                                                                                            </td>
+                                                                                        {% endif %}
+                                                                                        {% if nomenclature.stock_a_date >= 0 %}
+                                                                                            <td class="bg-success text-white">
+                                                                                                {{ nomenclature.stock_a_date|floatformat:4 }}
+                                                                                            </td>
+                                                                                        {% else %}
+                                                                                            <td class="bg-warning">
+                                                                                                {{ nomenclature.stock_a_date|floatformat:4 }}
+                                                                                            </td>
+                                                                                        {% endif %}
+                                                                                        {% for liste_cde in nomenclature.liste_cde_ha %}
+                                                                                        <tr>
+                                                                                            <td colspan="12">
+
+                                                                                                <td>
+                                                                                                    {{ liste_cde.fournisseur }}
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    {{ liste_cde.num_commande }}
+                                                                                                </td>
+                                                                                                <td>
+                                                                                                    {{ liste_cde.num_ligne }}
+                                                                                                </td>
+                                                                                                {% if liste_cde.quantite_commande >= nomenclature.stock_a_date|abs %}
+                                                                                                <td class="bg-success text-white">
+                                                                                                    {{ liste_cde.quantite_commande }}
+                                                                                                </td>
+                                                                                                {% else %}
+                                                                                                <td>
+                                                                                                    {{ liste_cde.quantite_commande }}
+                                                                                                </td>
+                                                                                                {% endif %}
+                                                                                                <td>
+                                                                                                    {{ liste_cde.date_liv_accorde|slice:"10" }}
+                                                                                                </td>
+                                                                                                {% if liste_cde.reception %}
+                                                                                                <td class="bg-success text-white">
+                                                                                                    X
+                                                                                                </td>
+                                                                                                {% else %}
+                                                                                                <td>
+
+                                                                                                </td>
+                                                                                                {% endif %}
+                                                                                            </td>
+                                                                                        </tr>
+                                                                                        {% endfor %}
+                                                                                    </td>
+                                                                                {% endif %}
+                                                                            </tr>
+                                                                            
+                                                                        {% endfor %}
+                                                                    {% endfor %}
+                                                                </div>
+
+                                                            </tr>
+                                                        </div>
+                                                    </td>
+
+                                                {% endif %}
+                                            </div>
+                                        {% endfor %}        
+                                    {% endfor%}
+                                        
+                                </div>
+                            </tr>
+                        </tbody>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</div>
+
+<!-- Système de pagination en fin de page -->
+<div class="container">
+    <div class="row align-items-start text-center">
+        {% if page_obj.has_previous %}
+        <div class="col border pt-3 pb-3">
+            <a href="?{% param_replace page=1 %}">&laquo; Première</a>
+        </div>
+        <div class="col border pt-3 pb-3">
+            <a href="?{% param_replace page=page_obj.previous_page_number %}">Précédente</a>
+        </div>
+        {% endif %}
+        <div class="col border pt-3 pb-3">
+            <span class="current">
+                Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.
+            </span>
+        </div>
+        {% if page_obj.has_next %}
+        <div class="col border pt-3 pb-3">
+            <a href="?{% param_replace page=page_obj.next_page_number %}">Suivante</a>
+        </div>
+        <div class="col border pt-3 pb-3">
+            <a href="?{% param_replace page=page_obj.paginator.num_pages %}">Dernière &raquo;</a>
+        </div>
+        {% endif %}
+        <div class="col border pt-3 pb-3">
+            <form>
+
+                <input id="page" name="page" type="text" class="text-center">
+            </form>
+            <a href="?{% param_replace page=page %}">Aller à la page</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
