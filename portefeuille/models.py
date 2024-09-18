@@ -108,3 +108,4 @@ class CommandeFournisseur(models.Model):
     quantite_commande = models.FloatField(default=0.0, blank=True)
     reception = models.BooleanField()
     reference_cde = models.CharField(max_length=125, blank=True)
+    num_fournisseur = models.IntegerField(default=0, blank=True)

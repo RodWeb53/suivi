@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import home, recherche_operation, suivi, update_base, portefeuille, stock, contrainte
+from .views import home, recherche_operation, suivi, update_base, portefeuille, stock, contrainte, achats
 
 urlpatterns = [
     # url de la page d'accueuil
@@ -7,6 +7,7 @@ urlpatterns = [
     # Urls suivi
     path("suivi", portefeuille.portefeuille, name="suivi"),
     path("stock", stock.stock, name="stock"),
+    path("achats", achats.achats, name="achats"),
     path("recherche_operation", recherche_operation.recherche_operation, name="recherche_operation"),
     path("operations", recherche_operation.list_operation, name="operations"),
     path("contrainte", contrainte.contrainte, name="contrainte"),
