@@ -24,6 +24,7 @@ def index(request):
         montant_retard = 0
         das_retard = []
         das_mois = []
+        date_analyse = ""
         das_mois_suivant = []
         das_mois_suivant_deux = []
         das_mois_suivant_trois = []
@@ -32,6 +33,7 @@ def index(request):
         montant_mois_suivant_deux = 0
         montant_mois_suivant_trois = 0
         for ligne in data:
+            date_analyse = ligne["date_arrivee"][0:10]
             if ligne["date_arrivee"][0:10] < date_jour_complete:
                 montant_retard = montant_retard + int(ligne["montant_total"])
                 das_retard.append(ligne)
