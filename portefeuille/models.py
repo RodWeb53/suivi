@@ -84,6 +84,7 @@ class BaseNomenclature(models.Model):
     date_conso = models.DateField(blank=True)
     num_unique_nomenclature = models.CharField(max_length=50, blank=True)
     produit_gp = models.BooleanField()
+    famille_produit = models.IntegerField(default=0, blank=True)
 
     def __str__(self):
         return f"{self.num_of_nomenclature} ({self.num_produit}) ({self.designation_produit})"

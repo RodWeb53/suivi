@@ -1,10 +1,10 @@
 {% extends "portefeuille/base.html" %}
 {% load tag %}
 {% load mathfilters %}
-<!-- Page pour afficher le portefeuille de suivi client -->
+<!-- Page pour afficher le portefeuille de suivi client  pour les achats-->
 {% block content %}
 
-<!-- Module de recherche par client et par produit-->
+<!-- Module de recherche par fournisseur N° de commande date de livraison-->
 <div class="row p-4">
     <div class="col-sm-12 mt-3">
         <div class="card">
@@ -15,16 +15,21 @@
                 <div class="card-body">
                     {% csrf_token %}
                     <div class="container">
-
                         <div class="row text-center">
-                            <div class="col-sm-2"></div>
-                            <!-- <div class="col-sm-3" style="visibility: hidden"> -->
                             <div class="col-sm-2" style="display: none;">
                                 <P class="fw-bold">Numéro de client : {{ form.base_forme }}</P>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-3">
                                 <P class="fw-bold">Ligne sans commande : {{ form.commande_choix }}</P>
                             </div>
+                            <div class="col-sm-3">
+                                <P class="fw-bold">Avec ou sans TS : {{ form.famille_choix }}</P>
+                            </div>
+                            <div class="col-sm-3">
+                                <P class="fw-bold">Sélection famille produit:  <br> <br> {{ form.famille_produit }}</P>
+                            </div>
+                        </div>
+                        <div class="row text-center">
                             <div class="col-sm-2">
                                 <P class="fw-bold">Code fournisseur : <br> {{ form.fournisseur }}</P>
                             </div>
@@ -32,7 +37,13 @@
                                 <P class="fw-bold">N° de commande : <br> {{ form.num_commande }}</P>
                             </div>
                             <div class="col-sm-2">
-                                <P class="fw-bold">Date de livraison : <br> {{ form.date_commande }}</P>
+                                <P class="fw-bold">Date début livraison : <br> {{ form.date_debut_commande }}</P>
+                            </div>
+                            <div class="col-sm-2">
+                                <P class="fw-bold">Date fin livraison : <br> {{ form.date_commande }}</P>
+                            </div>
+                            <div class="col-sm-2">
+                                <P class="fw-bold">Code Produit : <br> {{ form.produit }}</P>
                             </div>
                         </div>
                     </div>
