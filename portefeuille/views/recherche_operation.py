@@ -28,12 +28,14 @@ def recherche_operation(request):
         machine_form = request.GET.get("machine_choix", 0)
         type_machine_form = request.GET.get("type_machine", 0)
         client_form = request.GET.get("client", 0)
+        lance_form = request.GET.get("lance_choix", 0)
 
         if machine_form == 0:
             # Chargement des données de recherche dans le formulaire de base avec des valeurs à 0
             form.fields['client'].initial = client_form
             form.fields['machine_choix'].initial = machine_form
             form.fields['type_machine'].initial = type_machine_form
+            form.fields['lance_choix'].initial = lance_form
             # Envoie des données globale
             data = data
         else:
@@ -43,8 +45,10 @@ def recherche_operation(request):
             form.fields['client'].initial = client_form
             form.fields['machine_choix'].initial = machine_form
             form.fields['type_machine'].initial = type_machine_form
-            # S'il y a un filtre sur le poste
-            if machine_form == "1" and client_form == "0":
+            form.fields['lance_choix'].initial = lance_form
+
+            # S'il y a un filtre sur le poste et pas sur le client et tout statut OF
+            if machine_form == "1" and client_form == "0" and lance_form == "0":
 
                 for client in data:
                     if client['operations']:
@@ -57,8 +61,24 @@ def recherche_operation(request):
                                         liste_filtre.append(client)
 
                 data = liste_filtre
-            # S'il y a un filtre sur le poste et le client
-            elif machine_form == "1" and client_form != "0":
+            # S'il y a un filtre sur le poste et pas sur le client et statut OF est sur Lancé
+            if machine_form == "1" and client_form == "0" and lance_form == "1":
+
+                for client in data:
+                    if client['operations']:
+                        for recherche in client['operations']:
+                            for machine in recherche:
+                                if machine["phase"] == type_machine_form.upper() and not machine["solder"]:
+                                    for of_lancer in client['of']:
+                                        if of_lancer['of'] == machine['num_of_operation'] and of_lancer['statut_of'] == 'L':
+                                            if client in liste_filtre:
+                                                break
+                                            else:
+                                                liste_filtre.append(client)
+
+                data = liste_filtre
+            # S'il y a un filtre sur le poste et le client et tout statut OF
+            elif machine_form == "1" and client_form != "0" and lance_form == "0":
 
                 for client in data:
                     if client["num_client"] == int(client_form):
@@ -72,8 +92,25 @@ def recherche_operation(request):
                                             liste_filtre.append(client)
 
                 data = liste_filtre
-            # S'il y a un filtre sur la machine
-            elif machine_form == "2" and client_form == "0":
+            # S'il y a un filtre sur le poste et le client et statut OF sur Lancé
+            elif machine_form == "1" and client_form != "0" and lance_form == "1":
+
+                for client in data:
+                    if client["num_client"] == int(client_form):
+                        if client['operations']:
+                            for recherche in client['operations']:
+                                for machine in recherche:
+                                    if machine["phase"] == type_machine_form.upper() and not machine["solder"]:
+                                        for of_lancer in client['of']:
+                                            if of_lancer['of'] == machine['num_of_operation'] and of_lancer['statut_of'] == 'L':
+                                                if client in liste_filtre:
+                                                    break
+                                                else:
+                                                    liste_filtre.append(client)
+
+                data = liste_filtre
+            # S'il y a un filtre sur la machine et pas sur le client et tout statut OF
+            elif machine_form == "2" and client_form == "0" and lance_form == "0":
 
                 for client in data:
                     if client['operations']:
@@ -86,8 +123,24 @@ def recherche_operation(request):
                                         liste_filtre.append(client)
 
                 data = liste_filtre
-            # S'il y a un filtre sur la machine et sur le client
-            elif machine_form == "2" and client_form != "0":
+            # S'il y a un filtre sur la machine et pas sur le client et statut OF sur Lancé
+            elif machine_form == "2" and client_form == "0" and lance_form == "1":
+
+                for client in data:
+                    if client['operations']:
+                        for recherche in client['operations']:
+                            for machine in recherche:
+                                if machine["machine"] == type_machine_form.upper() and not machine["solder"]:
+                                    for of_lancer in client['of']:
+                                        if of_lancer['of'] == machine['num_of_operation'] and of_lancer['statut_of'] == 'L':
+                                            if client in liste_filtre:
+                                                break
+                                            else:
+                                                liste_filtre.append(client)
+
+                data = liste_filtre
+            # S'il y a un filtre sur la machine et sur le client et tout statut OF
+            elif machine_form == "2" and client_form != "0" and lance_form == "0":
 
                 for client in data:
                     if client["num_client"] == int(client_form):
@@ -99,6 +152,23 @@ def recherche_operation(request):
                                             break
                                         else:
                                             liste_filtre.append(client)
+
+                data = liste_filtre
+            # S'il y a un filtre sur la machine et sur le client et statut OF Lancé
+            elif machine_form == "2" and client_form != "0" and lance_form == "1":
+
+                for client in data:
+                    if client["num_client"] == int(client_form):
+                        if client['operations']:
+                            for recherche in client['operations']:
+                                for machine in recherche:
+                                    if machine["machine"] == type_machine_form.upper() and not machine["solder"]:
+                                        for of_lancer in client['of']:
+                                            if of_lancer['of'] == machine['num_of_operation'] and of_lancer['statut_of'] == 'L':
+                                                if client in liste_filtre:
+                                                    break
+                                                else:
+                                                    liste_filtre.append(client)
 
                 data = liste_filtre
 

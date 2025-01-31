@@ -13,4 +13,13 @@ class OperationkSearchForm(forms.Form):
         widget=forms.RadioSelect,
         choices=CHOICES,
     )
+    CHOICES_LANCE = [
+        ('0', 'Tout'),
+        ('1', 'Lancé'),
+    ]
+    lance_choix = forms.ChoiceField(
+        label="Choix de recherche",
+        widget=forms.RadioSelect,
+        choices=CHOICES_LANCE,
+    )
     type_machine = forms.CharField(label="Code Poste / Machine", required=False)
