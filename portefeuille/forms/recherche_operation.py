@@ -16,6 +16,7 @@ class OperationkSearchForm(forms.Form):
     CHOICES_LANCE = [
         ('0', 'Tout'),
         ('1', 'Lancé'),
+        ('2', 'Suggéré'),
     ]
     lance_choix = forms.ChoiceField(
         label="Choix de recherche",
@@ -23,3 +24,5 @@ class OperationkSearchForm(forms.Form):
         choices=CHOICES_LANCE,
     )
     type_machine = forms.CharField(label="Code Poste / Machine", required=False)
+    date_recherche_fin = forms.CharField(label="date recherche fin", required=False)
+    code_produit = forms.CharField(label="Code produit", required=False)
