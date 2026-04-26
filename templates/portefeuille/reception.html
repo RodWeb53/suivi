@@ -1,0 +1,158 @@
+{% extends "portefeuille/base.html" %}
+{% load tag %}
+{% load mathfilters %}
+<!-- Page pour afficher le portefeuille de suivi client -->
+{% block content %}
+
+<!-- Module de recherche par client et par produit-->
+<div class="row p-4">
+    <div class="col-sm-12 mt-3">
+        <div class="card">
+            <div class="card-header text-center">
+                <h3 class="fw-bold">Moteur de recherche reception</h3>
+            </div>
+            <form action="{% url 'reception' %}" method="post">
+                <div class="card-body">
+                    {% csrf_token %}
+                    <div class="container">
+
+                        <div class="row text-center">
+                            <!-- <div class="col-sm-2"></div> -->
+                            <div class="col-sm-2" style="display: none;">
+                                <P class="fw-bold">Numéro de client : {{ form.base_forme }}</P>
+                            </div>
+                            <div class="col-sm-2">
+                                <P class="fw-bold">Ligne sans commande : {{ form.commande_choix }}</P>
+                            </div>
+                            <div class="col-sm-2">
+                                <P class="fw-bold">Code fournisseur : <br> {{ form.fournisseur }}</P>
+                            </div>
+                            <div class="col-sm-2">
+                                <P class="fw-bold">N° de commande : <br> {{ form.num_commande }}</P>
+                            </div>
+                            <div class="col-sm-2">
+                                <P class="fw-bold">N° de Produit : <br> {{ form.num_produit }}</P>
+                            </div>
+                            <div class="col-sm-2">
+                                <P class="fw-bold">Date de livraison : <br> {{ form.date_commande }}</P>
+                            </div>
+                            <div class="col-sm-2" hidden>
+                                <P class="fw-bold">Date du jour : <br> {{ form.date_today }}</P>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row text-center">
+                        <div class="col-sm-4">
+
+                        </div>
+                        <div class="col-sm-2">
+                            <button class="btn btn-info" type="submit"><i class="fa fa-search" aria-hidden="true"></i>Rechercher</button>
+                        </div>
+                        <div class="col-sm-2">
+                            <a class="btn btn-success" href="{% url 'reception' %}">
+                                <i class="fa fa-tachometer" aria-hidden="true"></i> Réinisialiser les filtres
+                            </a>
+                        </div>
+                        <div class="col-sm-2">
+                            
+                        </div>
+                        <div class="col-sm-2">
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Maquette de la structure des données reçue de l'analyse -->
+<div class="table-responsive-sm" p-4>
+    <table class="table table-sm">
+        <thead>
+            <tr class="text-center">
+                <th scope="col">N° Fournisseur</th>
+                <th scope="col">Fournisseur</th>
+                <th scope="col">N° de commande</th>
+                <th scope="col">N° de ligne</th>
+                <th scope="col">Code produit</th>
+                <th scope="col">Désignation</th>
+                <th scope="col">Date livraison</th>
+                <th scope="col">N° OF</th>
+                <th scope="col">Phase OF</th>
+                <th scope="col">Date besoin</th>
+                <th scope="col">réception</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for data in page_obj %}
+                {% for ligne_cde in data.liste_cde_ha %}
+                    {% if ligne_cde.reception %}
+
+                        {% if ligne_cde.date_liv_accorde|slice:"10" > date_jour %}
+
+                        {% else %}
+                            <tr class="text-center">
+                                <td>{{ ligne_cde.num_fournisseur }}</td>
+                                <td>{{ ligne_cde.fournisseur }}</td>
+                                <td>{{ ligne_cde.num_commande }}</td>
+                                <td>{{ ligne_cde.num_ligne }}</td>
+                                <td>{{ ligne_cde.num_produit_achat }}</td>
+                                <td>{{ data.designation_produit }}</td>
+                                <td>{{ ligne_cde.date_liv_accorde|slice:"10" }}</td>
+                                <td>{{ data.num_of_nomenclature }}</td>
+                                <td>{{ data.num_phase_nomenclature }}</td>
+                                {% if data.date_conso|slice:"10" > date_analyse  %}
+                                    <td >{{ data.date_conso|slice:"10" }}</td>
+                                {% else %}
+                                    <td class="bg-danger text-white">{{ data.date_conso|slice:"10" }}</td>
+                                {% endif %}
+                                <td class="bg-success text-white"> X</td>
+                            </tr>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+
+            {% endfor %}
+
+        </tbody>
+    </table>
+    
+</div>
+
+<!-- Système de pagination en fin de page -->
+<div class="container">
+    <div class="row align-items-start text-center">
+        {% if page_obj.has_previous %}
+        <div class="col border pt-3 pb-3">
+            <a href="?{% param_replace page=1 %}">&laquo; Première</a>
+        </div>
+        <div class="col border pt-3 pb-3">
+            <a href="?{% param_replace page=page_obj.previous_page_number %}">Précédente</a>
+        </div>
+        {% endif %}
+        <div class="col border pt-3 pb-3">
+            <span class="current">
+                Page {{ page_obj.number }} sur {{ page_obj.paginator.num_pages }}.
+            </span>
+        </div>
+        {% if page_obj.has_next %}
+        <div class="col border pt-3 pb-3">
+            <a href="?{% param_replace page=page_obj.next_page_number %}">Suivante</a>
+        </div>
+        <div class="col border pt-3 pb-3">
+            <a href="?{% param_replace page=page_obj.paginator.num_pages %}">Dernière &raquo;</a>
+        </div>
+        {% endif %}
+        <div class="col border pt-3 pb-3">
+            <form>
+
+                <input id="page" name="page" type="text" class="text-center">
+            </form>
+            <a href="?{% param_replace page=page %}">Aller à la page</a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
